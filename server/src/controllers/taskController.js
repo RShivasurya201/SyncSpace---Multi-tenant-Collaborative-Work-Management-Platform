@@ -8,6 +8,11 @@ const Notification = require("../models/Notification");
 exports.createTask = async (req, res) => {
   try {
     const { title, description, projectId } = req.body;
+    const dueDate = req.body.dueDate || req.body.due_date || req.body.deadline;
+    const parsedDueDate = dueDate ? new Date(dueDate) : undefined;
+    const dueDateValue = parsedDueDate instanceof Date && !isNaN(parsedDueDate)
+      ? parsedDueDate
+      : undefined;
 
     const project = await Project.findOne({
       _id: projectId,
@@ -24,6 +29,7 @@ exports.createTask = async (req, res) => {
       project: projectId,
       organization: req.organizationId,
       createdBy: req.user._id,
+      dueDate: dueDateValue,
     });
 
     // activity log
@@ -37,6 +43,7 @@ exports.createTask = async (req, res) => {
       after: {
         title: task.title,
         status: task.status,
+        dueDate: task.dueDate,
       },
     });
 
@@ -58,12 +65,38 @@ exports.getTasks = async (req, res) => {
       project: projectId,
       organization: req.organizationId,
       isDeleted: false,
-    }).populate("assignedTo", "name email");
+    }).populate("assignedTo", "name email")
+     .populate("createdBy", "name email")
+     .populate("comments.user", "name email");
 
     res.json(tasks);
 
   } catch (error) {
     res.status(500).json({ message: "Fetch tasks failed", error });
+  }
+};
+
+// GET SINGLE TASK
+exports.getTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+
+    const task = await Task.findOne({
+      _id: taskId,
+      organization: req.organizationId,
+      isDeleted: false,
+    }).populate("assignedTo", "name email")
+     .populate("createdBy", "name email")
+     .populate("comments.user", "name email");
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    res.json(task);
+
+  } catch (error) {
+    res.status(500).json({ message: "Fetch task failed", error });
   }
 };
 
@@ -104,6 +137,94 @@ exports.updateTaskStatus = async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ message: "Update status failed", error });
+  }
+};
+
+// UPDATE TASK DETAILS
+exports.updateTask = async (req, res) => {
+  try {
+    const { title, description, priority } = req.body;
+    const task = await Task.findOne({
+      _id: req.params.taskId,
+      organization: req.organizationId,
+      isDeleted: false,
+    });
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    if (title !== undefined) {
+      if (!String(title).trim()) {
+        return res.status(400).json({ message: "Task title is required" });
+      }
+      task.title = String(title).trim();
+    }
+    if (description !== undefined) task.description = description;
+    if (priority !== undefined) {
+      const normalizedPriority = String(priority).trim().toUpperCase();
+      if (!["LOW", "MEDIUM", "HIGH"].includes(normalizedPriority)) {
+        return res.status(400).json({ message: "Invalid task priority" });
+      }
+      task.priority = normalizedPriority;
+    }
+
+    await task.save();
+
+    await Activity.create({
+      organization: req.organizationId,
+      project: task.project,
+      user: req.user._id,
+      action: "TASK_UPDATED",
+      entityType: "TASK",
+      entityId: task._id,
+      after: {
+        title: task.title,
+        description: task.description,
+        priority: task.priority,
+      },
+    });
+
+    const updatedTask = await Task.findById(task._id)
+      .populate("assignedTo", "name email")
+      .populate("createdBy", "name email")
+      .populate("comments.user", "name email");
+
+    res.json(updatedTask);
+  } catch (error) {
+    res.status(500).json({ message: "Update task failed", error: error.message });
+  }
+};
+
+// DELETE TASK
+exports.deleteTask = async (req, res) => {
+  try {
+    const task = await Task.findOne({
+      _id: req.params.taskId,
+      organization: req.organizationId,
+      isDeleted: false,
+    });
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    task.isDeleted = true;
+    await task.save();
+
+    await Activity.create({
+      organization: req.organizationId,
+      project: task.project,
+      user: req.user._id,
+      action: "TASK_DELETED",
+      entityType: "TASK",
+      entityId: task._id,
+      before: { title: task.title, description: task.description },
+    });
+
+    res.json({ message: "Task deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Delete task failed", error: error.message });
   }
 };
 

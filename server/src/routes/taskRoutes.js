@@ -8,8 +8,11 @@ const checkPermission = require("../middleware/checkPermission");
 const {
   createTask,
   getTasks,
+  getTask,
   updateTaskStatus,
   assignTask,
+  updateTask,
+  deleteTask,
 } = require("../controllers/taskController");
 
 
@@ -30,13 +33,37 @@ router.get(
   getTasks
 );
 
+// GET SINGLE TASK
+router.get(
+  "/task/:taskId",
+  authMiddleware,
+  orgMiddleware,
+  getTask
+);
+
 // UPDATE STATUS
 router.patch(
   "/:taskId/status",
   authMiddleware,
   orgMiddleware,
-  checkPermission("CREATE_TASK"),
+  checkPermission("UPDATE_TASK"),
   updateTaskStatus
+);
+
+router.put(
+  "/:taskId",
+  authMiddleware,
+  orgMiddleware,
+  checkPermission("UPDATE_TASK"),
+  updateTask
+);
+
+router.delete(
+  "/:taskId",
+  authMiddleware,
+  orgMiddleware,
+  checkPermission("MANAGE_PROJECT"),
+  deleteTask
 );
 
 // ASSIGN TASK

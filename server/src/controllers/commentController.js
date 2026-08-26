@@ -61,6 +61,11 @@ exports.addComment = async (req,res)=>{
 
     await task.save();
 
+    const populatedTask = await Task.findById(task._id)
+      .populate("comments.user", "name email")
+      .populate("assignedTo", "name email")
+      .populate("createdBy", "name email");
+
     await Activity.create({
 
       organization:
@@ -87,7 +92,7 @@ exports.addComment = async (req,res)=>{
 
     });
 
-    res.json(task);
+    res.json(populatedTask);
 
   }
 

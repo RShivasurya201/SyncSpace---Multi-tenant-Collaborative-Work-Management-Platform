@@ -4,19 +4,23 @@ const Invite = require("../models/Invite");
 const Membership = require("../models/Membership");
 const Activity = require("../models/Activity");
 const Organization = require("../models/Organization");
-const {
-sendInviteEmail,
-}=require(
-"../services/mailService"
-);
+const { hasPermission, normalizeRoleName, ALLOWED_MEMBER_ROLES } = require("../rbac/permissions");
+const { sendInviteEmail } = require("../services/mailService");
 
 exports.createInvite = async (req, res) => {
   try {
     const { email, role } = req.body;
 
-    if (!["OWNER", "ADMIN"].includes(req.role)) {
+    if (!hasPermission(req.role, "INVITE_MEMBER")) {
       return res.status(403).json({
         message: "Only owner/admin can invite",
+      });
+    }
+
+    const normalizedRole = normalizeRoleName(role);
+    if (!ALLOWED_MEMBER_ROLES.includes(normalizedRole)) {
+      return res.status(400).json({
+        message: "Invalid invite role",
       });
     }
 
@@ -39,40 +43,26 @@ exports.createInvite = async (req, res) => {
     expires.setDate(expires.getDate() + 7);
 
     const invite = await Invite.create({
+      email,
+      organization: req.organizationId,
+      role: normalizedRole,
+      invitedBy: req.user._id,
+      token,
+      expiresAt: expires,
+    });
 
-        email,
+    const organization = await Organization.findById(req.organizationId);
 
-        organization:
-        req.organizationId,
-
-        role,
-
-        invitedBy:
-        req.user._id,
-
-        token,
-
-        expiresAt:
-        expires,
-
-      });
-
-      const organization =
-      await Organization.findById(
-      req.organizationId
-      );
-
+    try {
       await sendInviteEmail(
-
         email,
-
-        organization.name,
-
+        organization?.name || "your workspace",
         req.user.name,
-
         token
-
       );
+    } catch (error) {
+      console.warn("Invite email delivery failed, continuing without email.", error.message);
+    }
     await Activity.create({
       organization: req.organizationId,
       user: req.user._id,
@@ -99,6 +89,23 @@ exports.createInvite = async (req, res) => {
   }
 };
 
+exports.getPendingInvites = async (req, res) => {
+  try {
+    const invites = await Invite.find({
+      organization: req.organizationId,
+      status: "PENDING",
+    })
+      .populate("invitedBy", "name email")
+      .select("email role invitedBy createdAt expiresAt status");
+
+    res.json(invites);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch pending invites",
+      error: error.message,
+    });
+  }
+};
 
 exports.acceptInvite = async (req, res) => {
   try {

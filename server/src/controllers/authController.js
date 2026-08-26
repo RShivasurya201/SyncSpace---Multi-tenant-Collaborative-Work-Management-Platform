@@ -49,57 +49,56 @@ exports.signup = async (req, res) => {
       });
 
     let organization = null;
+    let memberRole = "VIEWER";
 
-    // only create org if provided
+    if (organizationName && organizationName.trim()) {
+      const orgNameTrimmed = organizationName.trim();
 
-    if (
-      organizationName &&
-      organizationName.trim()
-    ) {
+      const escaped = orgNameTrimmed.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-      organization =
-      await Organization.create({
-
-        name:
-        organizationName.trim(),
-
-        owner:
-        user._id,
-
+      const existingOrg = await Organization.findOne({
+        name: { $regex: `^${escaped}$`, $options: "i" },
       });
 
-      await Membership.create({
+      if (existingOrg) {
+        organization = existingOrg;
+        memberRole = "VIEWER";
+        await Membership.create({
+          user: user._id,
+          organization: organization._id,
+          role: memberRole,
+        });
+      } else {
+        organization = await Organization.create({
+          name: orgNameTrimmed,
+          owner: user._id,
+        });
+        memberRole = "OWNER";
 
-        user:
-        user._id,
-
-        organization:
-        organization._id,
-
-        role:
-        "OWNER",
-
-      });
-
+        await Membership.create({
+          user: user._id,
+          organization: organization._id,
+          role: memberRole,
+        });
+      }
     }
 
-    const token =
-      generateToken(user._id);
-
-    const userData =
-      user.toObject();
-
+    const token = generateToken(user._id);
+    const userData = user.toObject();
     delete userData.password;
 
+    const orgPayload = organization
+      ? {
+          ...(organization.toObject ? organization.toObject() : organization),
+          role: memberRole,
+        }
+      : null;
+
     res.status(201).json({
-
       token,
-
-      user:
-      userData,
-
-      organization,
-
+      user: userData,
+      organization: orgPayload,
+      organizations: organization ? [{ organization: orgPayload, role: memberRole }] : [],
     });
 
   }

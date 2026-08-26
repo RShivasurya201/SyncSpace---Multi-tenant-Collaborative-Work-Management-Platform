@@ -5,6 +5,8 @@ const client = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
 });
 
+const BLOCKER_MODEL = process.env.BLOCKER_MODEL || "openai/gpt-oss-20b";
+
 async function generateBlockerInfo(comments) {
 
   if (!comments.length) {
@@ -52,8 +54,7 @@ Respond ONLY JSON:
     const completion =
       await client.chat.completions.create({
 
-      model:
-      "llama-3.3-70b-versatile",
+      model: BLOCKER_MODEL,
 
       messages: [
 
@@ -74,8 +75,20 @@ Respond ONLY JSON:
       .message
       .content;
 
-    const parsed =
-      JSON.parse(output);
+    const jsonOutput = output.match(/\{[\s\S]*\}/)?.[0];
+    const parsed = JSON.parse(jsonOutput || output);
+
+    const allowedTypes = [
+      "DEPENDENCY",
+      "CLIENT",
+      "RESOURCE",
+      "UNCLEAR",
+      "OTHER",
+    ];
+
+    if (!parsed.summary || !allowedTypes.includes(parsed.type)) {
+      throw new Error("AI blocker response was invalid");
+    }
 
     return {
 

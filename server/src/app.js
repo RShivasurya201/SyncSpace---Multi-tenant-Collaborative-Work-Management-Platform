@@ -12,6 +12,7 @@ const commentRoutes=
 require(
 "./routes/commentRoutes"
 );
+const activityRoutes = require("./routes/activityRoutes");
 const inviteRoutes = require("./routes/inviteRoutes");
 
 const app = express();
@@ -20,7 +21,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/test", testRoutes);
+if (process.env.NODE_ENV !== "production") {
+  app.use("/api/test", testRoutes);
+}
 app.use("/api/projects", projectRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/org", orgRoutes);
@@ -30,6 +33,8 @@ app.use(
 "/api/comments",
 commentRoutes
 );
+
+app.use("/api/activities", activityRoutes);
 
 app.use("/api/invites", inviteRoutes);
 

@@ -3,6 +3,7 @@ const router = express.Router();
 
 const authMiddleware = require("../middleware/authMiddleware");
 const orgMiddleware = require("../middleware/orgMiddleware");
+const checkPermission = require("../middleware/checkPermission");
 
 const {
   addMember,
@@ -11,16 +12,27 @@ const {
   removeMember,
 } = require("../controllers/orgController");
 
-// existing route
-router.post("/add-member", authMiddleware, orgMiddleware, addMember);
+router.post(
+  "/add-member",
+  authMiddleware,
+  orgMiddleware,
+  checkPermission("MANAGE_MEMBERS"),
+  addMember
+);
 
-// ✅ NEW ROUTES
-router.get("/members", authMiddleware, orgMiddleware, getMembers);
+router.get(
+  "/members",
+  authMiddleware,
+  orgMiddleware,
+  checkPermission("VIEW"),
+  getMembers
+);
 
 router.patch(
   "/members/:memberId/role",
   authMiddleware,
   orgMiddleware,
+  checkPermission("MANAGE_MEMBERS"),
   updateMemberRole
 );
 
@@ -28,6 +40,8 @@ router.delete(
   "/members/:memberId",
   authMiddleware,
   orgMiddleware,
+  checkPermission("MANAGE_MEMBERS"),
   removeMember
 );
+
 module.exports = router;

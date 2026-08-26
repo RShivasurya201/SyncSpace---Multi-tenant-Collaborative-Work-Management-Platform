@@ -18,9 +18,17 @@ async function sendInviteEmail(
   inviterName,
   token
 ) {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.warn("Email service is not configured. Skipping invite email delivery.");
+    return;
+  }
 
-  const inviteLink =
-`${process.env.CLIENT_URL}/accept-invite/${token}`;
+  if (!process.env.CLIENT_URL) {
+    console.warn("CLIENT_URL is not configured. Skipping invite email delivery.");
+    return;
+  }
+
+  const inviteLink = `${process.env.CLIENT_URL}/accept-invite/${token}`;
 
   const html = `
     <h2>You've been invited</h2>
@@ -44,18 +52,16 @@ async function sendInviteEmail(
     </p>
   `;
 
-  await transporter.sendMail({
-
-    from: process.env.EMAIL_USER,
-
-    to: email,
-
-    subject: "Organization Invite",
-
-    html,
-
-  });
-
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Organization Invite",
+      html,
+    });
+  } catch (error) {
+    console.warn("Invite email delivery failed, but invite was still created.", error.message);
+  }
 }
 
 module.exports = {

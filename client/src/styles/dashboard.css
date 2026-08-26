@@ -1,0 +1,402 @@
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f6f7fb;
+}
+
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* KPI */
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.kpi-card {
+  background: white;
+  border-radius: 26px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.04);
+  transition: .25s;
+}
+
+.kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.06);
+}
+
+.kpi-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kpi-icon {
+  font-size: 1.2rem;
+  color: #F12E54;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.kpi-card span {
+  margin: 0;
+  font-size: 1rem;
+  color: #8f8f8f;
+  font-weight: 500;
+}
+
+.kpi-card h2 {
+  margin: 0;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #242E42;
+}
+
+/* ROW 2 */
+
+.row-two {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 28px;
+}
+
+.activity-card-work {
+  background: white;
+  border-radius: 30px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+}
+
+.card-header h3 {
+  font-size: 1.15rem;
+  margin-bottom: 24px;
+}
+
+.chart-mock {
+  height: 300px;
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  padding: 20px;
+}
+
+.activity-chart {
+  min-height: 300px;
+  padding: 12px 0 8px;
+}
+
+.activity-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.activity-chart .chart-empty {
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8f8f8f;
+  font-size: 0.95rem;
+}
+
+.activity-axis-labels .axis-label {
+  font-size: 0.8rem;
+  fill: #8f8f8f;
+  font-weight: 500;
+}
+
+.activity-card svg {
+  overflow: visible;
+}
+
+.bar {
+  flex: 1;
+  border-radius: 14px 14px 0 0;
+  background: #F12E54;
+}
+
+.h35 { height: 35%; }
+.h40 { height: 40%; }
+.h50 { height: 50%; }
+.h55 { height: 55%; }
+.h65 { height: 65%; }
+.h75 { height: 75%; }
+.h90 { height: 90%; }
+
+/* RIGHT COLUMN */
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.deadline-card,
+.blocker-card {
+  background: white;
+  border-radius: 28px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+}
+
+.deadline-card h3,
+.blocker-card h3 {
+  margin-bottom: 18px;
+}
+
+.deadline-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.deadline-item:last-child {
+  border-bottom: none;
+}
+
+.deadline-item span {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deadline-item small {
+  color: #ff6b6b;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.blocker-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+}
+
+.blocker-item strong {
+  color: #ff6b6b;
+}
+
+/* ROW 3 */
+
+.row-three {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.activity-feed,
+.projects-card {
+  background: white;
+  border-radius: 30px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+}
+
+.activity-feed h3,
+.projects-card h3 {
+  margin-bottom: 20px;
+}
+
+.feed-item {
+  padding: 16px;
+  border-radius: 14px;
+  background: #fafafa;
+  margin-bottom: 12px;
+}
+
+.project-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px;
+  border-radius: 14px;
+  background: #fafafa;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.project-row:hover {
+  transform: translateY(-2px);
+  background: rgba(241,46,84,0.05);
+}
+
+.project-arrow {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #242E42;
+  color: white;
+  font-size: 0.75rem;
+  opacity: 0;
+  transform: translateX(8px);
+  transition: 0.25s ease;
+}
+
+.project-row:hover .project-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1200px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .row-two {
+    grid-template-columns: 1fr;
+  }
+
+  .row-three {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-content {
+    gap: 20px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .kpi-card {
+    padding: 20px;
+    gap: 12px;
+    border-radius: 18px;
+  }
+
+  .kpi-card h2 {
+    font-size: 1.8rem;
+  }
+
+  .kpi-card span {
+    font-size: 0.85rem;
+  }
+
+  .row-two {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .row-three {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .activity-card-work,
+  .deadline-card,
+  .blocker-card,
+  .activity-feed,
+  .projects-card {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .card-header h3 {
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+
+  .chart-mock {
+    height: 200px;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .activity-chart {
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-content {
+    gap: 16px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .kpi-card {
+    padding: 16px;
+    gap: 10px;
+    border-radius: 16px;
+  }
+
+  .kpi-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .kpi-card span {
+    font-size: 0.8rem;
+  }
+
+  .kpi-icon {
+    font-size: 1rem;
+  }
+
+  .activity-card-work,
+  .deadline-card,
+  .blocker-card,
+  .activity-feed,
+  .projects-card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .card-header h3 {
+    font-size: 0.95rem;
+  }
+
+  .chart-mock {
+    height: 150px;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .activity-chart {
+    min-height: 150px;
+  }
+
+  .deadline-item,
+  .blocker-item {
+    padding: 10px 0;
+    gap: 8px;
+  }
+
+  .project-row {
+    padding: 12px;
+  }
+}

@@ -1,0 +1,554 @@
+.analytics-page{
+  padding:32px;
+}
+
+/* HEADER */
+
+.analytics-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:28px;
+}
+
+.analytics-header h1{
+  margin:0;
+  font-size:2rem;
+  color:#1F2937;
+}
+
+.analytics-header p{
+  margin-top:8px;
+  color:#6B7280;
+}
+
+/* MAIN GRID */
+
+.analytics-grid{
+
+  display:grid;
+
+  grid-template-columns:2fr 1.2fr;
+
+  grid-template-rows:auto auto;
+
+  gap:20px;
+
+}
+
+.activity-card{
+  grid-row:span 2;
+}
+
+/* CARD */
+
+.analytics-card{
+
+  background:white;
+
+  border-radius:18px;
+
+  padding:20px;
+
+  box-shadow:0 8px 24px rgba(0,0,0,.05);
+
+  transition:.25s;
+
+}
+
+.analytics-card:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:0 14px 30px rgba(0,0,0,.08);
+
+}
+
+.analytics-card h3{
+
+  margin:0;
+
+  color:#1F2937;
+
+  font-size:1.45rem;
+
+}
+
+.analytics-card p{
+
+  margin-top:6px;
+
+  margin-bottom:18px;
+
+  color:#6B7280;
+
+}
+
+/* BIG CARD */
+
+.activity-card{
+
+  min-height:560px;
+
+}
+
+.card-head{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin-bottom:12px;
+
+}
+
+/* PIE */
+
+.pie-layout{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  margin-top:20px;
+
+}
+
+.legend-list{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:18px;
+
+}
+
+.legend-list div{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  color:#6B7280;
+
+  font-size:.95rem;
+
+}
+
+.legend-list div span{
+
+  width:10px;
+
+  height:10px;
+
+  border-radius:50%;
+
+  display:block;
+
+}
+
+.legend-list strong{
+
+  margin-left:auto;
+
+  color:#374151;
+
+}
+
+/* RECHARTS */
+
+.recharts-wrapper{
+
+  font-size:.85rem;
+
+}
+
+.recharts-cartesian-grid line{
+
+  stroke:#ECEFF5;
+
+}
+
+.recharts-tooltip-wrapper{
+
+  border-radius:12px;
+
+}
+
+.recharts-default-tooltip{
+
+  border:none !important;
+
+  border-radius:12px !important;
+
+  box-shadow:0 10px 24px rgba(0,0,0,.08);
+
+}
+
+.recharts-legend-wrapper{
+
+  padding-top:12px;
+}
+
+/* PIE CHARTS */
+
+.analytics-grid .analytics-card:nth-child(2){
+
+  min-height:270px;
+
+}
+
+.analytics-grid .analytics-card:nth-child(3){
+
+  min-height:270px;
+
+}
+
+/* SECOND ROW */
+
+.analytics-grid .analytics-card:nth-child(4){
+
+  min-height:320px;
+  grid-column: 2; 
+    grid-row: 3;
+
+}
+
+.analytics-grid .analytics-card:nth-child(5){
+
+  min-height:320px;
+  grid-column: 1; 
+  grid-row: 3;
+
+}
+
+/* BAR CHARTS */
+
+.recharts-bar-rectangle path{
+
+  rx:6;
+
+}
+
+.recharts-label{
+
+  fill:#6B7280;
+
+}
+
+.recharts-cartesian-axis-tick-value{
+
+  fill:#6B7280;
+
+}
+
+/* TOOLTIP */
+
+.recharts-tooltip-item{
+
+  color:#374151 !important;
+
+}
+
+/* LEGEND */
+
+.recharts-default-legend{
+
+  margin-top:12px !important;
+
+}
+
+/* ANIMATION */
+
+.analytics-card{
+
+  animation:fadeIn .3s ease;
+
+}
+
+@keyframes fadeIn{
+
+  from{
+
+    opacity:0;
+
+    transform:translateY(8px);
+
+  }
+
+  to{
+
+    opacity:1;
+
+    transform:translateY(0);
+
+  }
+
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1400px){
+  .analytics-grid{
+    grid-template-columns:1fr;
+  }
+
+  .activity-card{
+    grid-row:auto;
+    min-height:auto;
+  }
+
+  .analytics-grid .analytics-card:nth-child(4){
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .analytics-grid .analytics-card:nth-child(5){
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+@media(max-width:900px){
+  .analytics-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:16px;
+  }
+
+  .pie-layout{
+    flex-direction:column;
+    gap:20px;
+  }
+
+  .analytics-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .analytics-grid .analytics-card {
+    width: 100%;
+  }
+
+  .analytics-grid .analytics-card:nth-child(2),
+  .analytics-grid .analytics-card:nth-child(3) {
+    min-height: auto;
+  }
+
+  .analytics-grid .analytics-card:nth-child(4),
+  .analytics-grid .analytics-card:nth-child(5) {
+    min-height: auto;
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-page {
+    padding: 20px;
+  }
+
+  .analytics-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .analytics-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .analytics-header p {
+    font-size: 0.9rem;
+  }
+
+  .analytics-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    grid-template-columns: 1fr;
+  }
+
+  .activity-card {
+    min-height: auto;
+    grid-row: auto;
+    grid-column: auto;
+  }
+
+  .analytics-card {
+    padding: 16px;
+    border-radius: 14px;
+    width: 100%;
+  }
+
+  .analytics-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+  }
+
+  .analytics-card p {
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+  }
+
+  .card-head {
+    margin-bottom: 10px;
+  }
+
+  .pie-layout {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .legend-list {
+    gap: 10px;
+  }
+
+  .legend-list div {
+    font-size: 0.85rem;
+    gap: 8px;
+  }
+
+  .legend-list div span {
+    width: 8px;
+    height: 8px;
+  }
+
+  .recharts-wrapper {
+    font-size: 0.75rem;
+  }
+
+  .recharts-cartesian-grid line {
+    stroke: #ECEFF5;
+  }
+
+  .recharts-tooltip-wrapper {
+    border-radius: 10px;
+  }
+
+  .recharts-default-tooltip {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    padding: 8px;
+  }
+
+  .recharts-legend-wrapper {
+    padding-top: 8px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .analytics-page {
+    padding: 16px;
+  }
+
+  .analytics-header {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .analytics-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .analytics-header p {
+    font-size: 0.8rem;
+  }
+
+  .analytics-grid {
+    gap: 12px;
+  }
+
+  .analytics-card {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .analytics-card h3 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .analytics-card p {
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+  }
+
+  .card-head {
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+  }
+
+  .pie-layout {
+    gap: 12px;
+  }
+
+  .legend-list {
+    gap: 8px;
+  }
+
+  .legend-list div {
+    font-size: 0.8rem;
+    gap: 6px;
+  }
+
+  .legend-list div span {
+    width: 6px;
+    height: 6px;
+  }
+
+  .legend-list strong {
+    font-size: 0.75rem;
+  }
+
+  .recharts-wrapper {
+    font-size: 0.65rem;
+  }
+
+  .recharts-default-tooltip {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    padding: 6px;
+    font-size: 0.7rem;
+  }
+
+  .recharts-cartesian-axis-tick-value {
+    fill: #6B7280;
+    font-size: 0.65rem;
+  }
+
+  .recharts-label {
+    fill: #6B7280;
+    font-size: 0.65rem;
+  }
+
+  .activity-card {
+    min-height: 250px;
+  }
+}
+
+/* EXACT GOOGLE-LIKE COLORS */
+
+:root{
+
+  --google-blue:#4285F4;
+
+  --google-green:#4CC76A;
+
+  --google-yellow:#F4C20D;
+
+  --google-red:#EA4335;
+
+  --google-purple:#7B46D8;
+
+  --google-grey:#D6DAE1;
+
+}
